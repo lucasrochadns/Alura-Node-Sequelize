@@ -108,7 +108,15 @@ class PessoaController {
     } catch (error) {
       return resp.status(500).json(error.message);
     }
-
+  }
+  static async restauraPessoa(req, res){
+    try {
+      const { id } = req.params;
+      await database.Pessoas.restore({ where: {id: Number(id)}});
+      return res.status(200).json({message: `Id ${id} Restaurado `});
+    } catch (error) {
+      return res.status(500).json({message: `${error}`})
+    }
   }
 }
 module.exports = PessoaController;
