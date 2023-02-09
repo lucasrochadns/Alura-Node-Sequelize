@@ -1,4 +1,5 @@
 const database = require('../models');
+const Sequelize = require("sequelize");
 
 class PessoaController {
 
@@ -119,22 +120,70 @@ class PessoaController {
       return resp.status(500).json(error.message);
     }
   }
-  static async restauraPessoa(req, res){
+  static async restauraPessoa(req, res) {
     try {
       const { id } = req.params;
-      await database.Pessoas.restore({ where: {id: Number(id)}});
-      return res.status(200).json({message: `Id ${id} Restaurado `});
+      await database.Pessoas.restore({ where: { id: Number(id) } });
+      return res.status(200).json({ message: `Id ${id} Restaurado ` });
     } catch (error) {
-      return res.status(500).json({message: `${error}`})
+      return res.status(500).json({ message: `${error}` })
     }
   }
 
   static async pegaMatriculas(req, resp) {
     const { estudante_id } = req.params;
     try {
-      const pessoa = await database.Pessoas.findOne({ where: {id: Number(estudante_id)}});
+      const pessoa = await database.Pessoas.findOne({ where: { id: Number(estudante_id) } });
       const matriculas = await pessoa.getAulasMatriculadas();
       return resp.status(200).json(matriculas);
+    } catch (error) {
+      return resp.status(500).json(error.message);
+    }
+  }
+
+  static async pegaMatriculasPorTurma(req, resp) {
+    const { turma_id } = req.params;
+    try {
+      const todasMatriculas = await database.Matriculas.findAndCountAll({
+        where: {
+          turma_id: Number(turma_id),
+          status: "confirmado"
+        },
+        limit: 12,
+        order: [['estudante_id', 'ASC']]
+      });
+
+      return resp.status(200).json(todasMatriculas);
+    } catch (error) {
+      return resp.status(500).json(error.message);
+    }
+  }
+
+  static async pegaTurmasLotadas(req, resp) {
+    const lotacaoTurma = 2;
+    try {
+      const turmasLotadas = await database.Matriculas.findAndCountAll({
+        where: {
+          status: "confirmado"
+        },
+        attributes: ['turma_id'],
+        group: ['turma_id'],
+        having: Sequelize.literal(`count(turma_id) >= ${lotacaoTurma}`)
+      });
+
+      return resp.status(200).json(turmasLotadas);
+    } catch (error) {
+      return resp.status(500).json(error.message);
+    }
+  }
+  static async cancelaMatricula(req, resp) {
+    const { estudante_id } = req.params;
+    try {
+
+      await database.Pessoas.update({ ativo: false }, { where: { id: Number(estudante_id) } });
+      await database.Matriculas.update({ status: 'cancelado' }, { where: { estudante_id: Number(estudante_id) } });
+
+      return resp.status(200).json({ messasge: `Usuário de ID: ${estudante_id}` });
     } catch (error) {
       return resp.status(500).json(error.message);
     }
