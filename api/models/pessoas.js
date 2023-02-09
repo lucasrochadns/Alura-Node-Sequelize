@@ -22,10 +22,10 @@ module.exports = (sequelize, DataTypes) => {
   Pessoas.init({
     nome: {
       type: DataTypes.STRING,
-      validate: {
-        len: [3, 50],
-        msg: 'Campo nome deve conter no minimo de 3 a 50 caracters'
+      validade:{
+          len: [3, 50]
       }
+    
     },
     ativo: DataTypes.BOOLEAN,
     email: {
@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isEmail: {
           args: true,
-          msg: 'dados do email invalidos '
+          msg: 'dados do email invalidos',
         }
       }
     },
@@ -43,10 +43,9 @@ module.exports = (sequelize, DataTypes) => {
     paranoid: true,
     defaultScope: {
       where: { ativo: true }
-    }, escopes: {
-      todos: { where: {} },
-      //etc ... constraint que quiser passar
-    },
+    }, 
+    scopes: { todos: { where: {} } },
+
     modelName: 'Pessoas',
   });
   return Pessoas;
