@@ -11,20 +11,41 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Pessoas.hasMany(models.Turmas, {foreignKey: 'docente_id'});
-      Pessoas.hasMany(models.Matriculas, {foreignKey: 'estudante_id'});
+      Pessoas.hasMany(models.Turmas, { foreignKey: 'docente_id' });
+      Pessoas.hasMany(models.Matriculas, {
+        foreignKey: 'estudante_id',
+        scope: { status: 'confirmado' },
+        as: 'aulasMatriculadas'
+      });
     }
   }
   Pessoas.init({
-    nome: DataTypes.STRING,
+    nome: {
+      type: DataTypes.STRING,
+      validate: {
+        len: [3, 50],
+        msg: 'Campo nome deve conter no minimo de 3 a 50 caracters'
+      }
+    },
     ativo: DataTypes.BOOLEAN,
-    email: DataTypes.STRING,
+    email: {
+      type: DataTypes.STRING,
+      validate: {
+        isEmail: {
+          args: true,
+          msg: 'dados do email invalidos '
+        }
+      }
+    },
     role: DataTypes.STRING
   }, {
     sequelize,
     paranoid: true,
     defaultScope: {
-      where : { ativo: true}
+      where: { ativo: true }
+    }, escopes: {
+      todos: { where: {} },
+      //etc ... constraint que quiser passar
     },
     modelName: 'Pessoas',
   });

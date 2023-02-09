@@ -25,7 +25,15 @@ Muitas aplicações em Node utilizam Sequelize. Então, depois que você entende
 você já consegue desbravar projetos que utilizam esse ORM,escobrir mais ferramentas conforme a complexidade do projeto que você está 
 trabalhando e também criar suas próprias APIs
 
-[Alura Curso](https://cursos.alura.com.br/course/orm-nodejs-api-sequelize-mysql/task/76884)
+# Requisitos do projeto.
+- [X]  0 cliente não gostaria que resgistros importantes do sistema, como as Pessoas, sejam apagados definitivamente do banco de dados
+- [X]  Para Deixar a interface mais limpa, o cliente gostaria na lista de Pessoas, por Padrão, fossem exibidos somente os usuários ativos.
+- [X]  Foram percebidas albuams falhas de validação dos formulários por parte do front-end, o que resultou em dados de email, invalidos no banco,
+É desejavel que essa validação não seja seja responbilidade exclusiva do front-ent.
+- [X]  E importante pode consultar todas as matrículas confirmadas referentes a estudante x de forma rápida.  
+
+[Alura Curso 1](https://cursos.alura.com.br/course/orm-nodejs-api-sequelize-mysql/task/76884).  
+[Alura Curso 2](https://cursos.alura.com.br/course/orm-nodejs-avancando-sequelize/task/79541).  
 
 
 

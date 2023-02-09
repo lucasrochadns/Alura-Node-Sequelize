@@ -1,10 +1,16 @@
 const  database  = require('../models');
-
+const Sequelize = require('sequelize');
+const op = Sequelize.Op;
 class TurmaController{
 
     static async findAllTurma(req, resp){
+        const { data_incial, data_final } = req.query;
+        const where = {};
+        data_incial || data_final ? where.data_inicio = {} : null;
+        data_incial ? where.data_inicio[op.gte] = data_incial : null;
+        data_final ? where.data_inicio[op.lte] = data_final : null;
         try{
-            const listaTurmas = await database.Turmas.findAll();
+            const listaTurmas = await database.Turmas.findAll({ where });
             return resp.status(200).json(listaTurmas);
         }catch(error){
             return resp.status(500).json({message: `${error}`})
@@ -52,6 +58,8 @@ class TurmaController{
             return res.status(500).json({message: `${error}`});
         }
     }
+
+
 }
 
 module.exports = TurmaController;

@@ -5,14 +5,15 @@ const router = Router();
 
 router.get('/pessoas', PessoaController.findAllPessoaAndAtivoTrue);
 router.get('/pessoas/todos', PessoaController.findAllPessoa);
+router.get('/pessoas/:estudante_id/matriculas', PessoaController.pegaMatriculas);
 router.get('/pessoas/:id', PessoaController.findById);
-router.post('/pessoas', PessoaController.save);
-router.put('/pessoas/:id', PessoaController.update);
-router.delete('/pessoas/:id', PessoaController.delete);
 router.get('/pessoas/:estudante_id/matricula/:matricula_id', PessoaController.findPessoaAndMatricula);
+router.post('/pessoas', PessoaController.save);
 router.post('/pessoas/:estudante_id/matricula', PessoaController.saveMatricula);
-router.put('/pessoas/:estudante_id/matricula/:matricula_id', PessoaController.updateMatricula);
-router.delete('/pessoas/:estudante_id/matricula/:matricula_id', PessoaController.deleteMatricula);
 router.post('/pessoas/:id/restaura', PessoaController.restauraPessoa);
+router.put('/pessoas/:id', PessoaController.update);
+router.put('/pessoas/:estudante_id/matricula/:matricula_id', PessoaController.updateMatricula);
+router.delete('/pessoas/:id', PessoaController.delete);
+router.delete('/pessoas/:estudante_id/matricula/:matricula_id', PessoaController.deleteMatricula);
 
 module.exports = router;
